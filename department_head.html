@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetFlow - Department Head Management Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           1. VARIABLES & BASE RESETS (Glassmorphic Theme Matching)
+           ========================================================================== */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --panel-bg: rgba(255, 255, 255, 0.03);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* Branding Colors */
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: rgba(255, 255, 255, 0.1);
+            --secondary-hover: rgba(255, 255, 255, 0.2);
+            
+            /* Semantic Status Colors */
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ==========================================================================
+           2. SIDEBAR NAVIGATION UTILITIES (Department Selectors)
+           ========================================================================== */
+        aside {
+            width: 280px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid var(--panel-border);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .role-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .dept-selector-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* ==========================================================================
+           3. MAIN FRAMEWORK LAYOUT
+           ========================================================================== */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(12px);
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.2);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-main);
+        }
+
+        .content-area {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .view-panel {
+            display: none;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* Metrics Summary Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .metric-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* ==========================================================================
+           4. GLASS CARDS & INTERACTIVES
+           ========================================================================== */
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            backdrop-filter: blur(8px);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background-color: rgba(15, 23, 42, 0.4);
+            color: var(--text-main);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: rgba(15, 23, 42, 0.7);
+        }
+
+        .btn {
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            font-size: 0.9rem;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-danger { background: transparent; border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+        .btn-danger:hover { background: var(--danger); color: white; }
+
+        /* ==========================================================================
+           5. TABLES & SEMANTIC BADGES
+           ========================================================================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        td {
+            padding: 0.85rem 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .badge-active { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .badge-finance { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar: 6 Structural Departments -->
+    <aside>
+        <div class="brand">
+            <i class="fa-solid fa-shield-halved"></i> AssetFlow
+        </div>
+        <div>
+            <span class="role-badge">HoD Console</span>
+        </div>
+        
+        <p class="dept-selector-label">Select Jurisdiction</p>
+        <ul class="nav-menu" id="deptNavMenu">
+            <li class="nav-item active" onclick="switchDepartment('hr')"><i class="fa-solid fa-users"></i> HR Department</li>
+            <li class="nav-item" onclick="switchDepartment('marketing')"><i class="fa-solid fa-bullhorn"></i> Marketing</li>
+            <li class="nav-item" onclick="switchDepartment('production')"><i class="fa-solid fa-industry"></i> Production</li>
+            <li class="nav-item" onclick="switchDepartment('purchase')"><i class="fa-solid fa-cart-shopping"></i> Purchase</li>
+            <li class="nav-item" onclick="switchDepartment('sales')"><i class="fa-solid fa-chart-line"></i> Sales</li>
+            <li class="nav-item" onclick="switchDepartment('rd')"><i class="fa-solid fa-flask"></i> R&D Department</li>
+        </ul>
+    </aside>
+
+    <!-- Main Dynamic Application Window -->
+    <main>
+        <header>
+            <h2 id="currentDeptHeader">HR Department Workspace</h2>
+            
+            <!-- Functional Data Scope Tabs -->
+            <div class="view-tabs">
+                <button class="tab-btn active" id="tab-employees" onclick="switchScope('employees')">Employee Details</button>
+                <button class="tab-btn" id="tab-finance" onclick="switchScope('finance')">Financial Ledger</button>
+                <button class="tab-btn" id="tab-assets" onclick="switchScope('assets')">Allocated Assets</button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            
+            <!-- Contextual Performance Metrics -->
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc;"><i class="fa-solid fa-users-viewfinder"></i></div>
+                    <div><small style="color:var(--text-muted)">Staff Count</small><h4 id="metric-staff">0</h4></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(245, 158, 11, 0.15); color: #fcd34d;"><i class="fa-solid fa-wallet"></i></div>
+                    <div><small style="color:var(--text-muted)">Expended Budget</small><h4 id="metric-budget">$0</h4></div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(16, 185, 129, 0.15); color: #6ee7b7;"><i class="fa-solid fa-box-archive"></i></div>
+                    <div><small style="color:var(--text-muted)">Active Assets</small><h4 id="metric-assets">0</h4></div>
+                </div>
+            </div>
+
+            <!-- SCOPE 1: EMPLOYEE DETAILS MANIPULATION -->
+            <div id="scope-employees" class="view-panel active">
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Current Department Personnel</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Designation</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3>Upsert Employee Entry</h3>
+                        <form id="employeeForm" onsubmit="handleEmployeeUpsert(event)">
+                            <input type="hidden" id="empId">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="empName" required placeholder="e.g. Jane Doe">
+                            </div>
+                            <div class="form-group">
+                                <label>Designation</label>
+                                <input type="text" id="empRole" required placeholder="e.g. Senior Specialist">
+                            </div>
+                            <div class="form-group">
+                                <label>Corporate Email</label>
+                                <input type="email" id="empEmail" required placeholder="name@company.com">
+                            </div>
+                            <button type="submit" class="btn"><i class="fa-solid fa-user-plus"></i> Save Record</button>
+                            <button type="button" class="btn btn-danger" onclick="resetEmployeeForm()" style="padding: 11px;">Clear</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCOPE 2: FINANCIAL MANAGEMENT -->
+            <div id="scope-finance" class="view-panel">
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Expense Ledger Entries</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ref Tag</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Cost Allocation</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="financeTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3>Log/Modify Expenditure</h3>
+                        <form id="financeForm" onsubmit="handleFinanceUpsert(event)">
+                            <input type="hidden" id="finId">
+                            <div class="form-group">
+                                <label>Description/Vendor</label>
+                                <input type="text" id="finDesc" required placeholder="e.g., Software Licenses Renewal">
+                            </div>
+                            <div class="form-group">
+                                <label>Cost Category</label>
+                                <select id="finType">
+                                    <option>Operational (OpEx)</option>
+                                    <option>Capital (CapEx)</option>
+                                    <option>Procurement</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount (USD)</label>
+                                <input type="number" id="finAmount" required placeholder="Amount in $">
+                            </div>
+                            <button type="submit" class="btn"><i class="fa-solid fa-file-invoice-dollar"></i> Commit Funds</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCOPE 3: ALLOCATED ASSET TRACKING -->
+            <div id="scope-assets" class="view-panel">
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Assets Inventory Mapping</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hardware Tag</th>
+                                    <th>Asset Model Name</th>
+                                    <th>Serial Value</th>
+                                    <th>Assigned Custodian</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assetsTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3>Reallocate Custodian</h3>
+                        <form id="assetForm" onsubmit="handleAssetReallocate(event)">
+                            <div class="form-group">
+                                <label>Select Target Hardware</label>
+                                <select id="assetSelectId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Assign to Employee (Email)</label>
+                                <input type="email" id="assetTargetEmail" required placeholder="employee@company.com">
+                            </div>
+                            <button type="submit" class="btn"><i class="fa-solid fa-arrows-spin"></i> Mutate Allocation</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- UI Automation Engine & Relational Mock Database Structuring -->
+    <script>
+        // Centralized Database divided strictly across your requested 6 categories
+        let database = {
+            hr: {
+                employees: [
+                    { id: "HR-101", name: "Alissa Vance", role: "HR Specialist", email: "alissa.v@company.com" },
+                    { id: "HR-102", name: "Bob Peterson", role: "Talent Acquisition", email: "bob.p@company.com" }
+                ],
+                finance: [
+                    { id: "FIN-H1", desc: "ATS Platform Subscription", type: "Operational (OpEx)", amount: 4500 },
+                    { id: "FIN-H2", desc: "Job Board Promotion Packages", type: "Procurement", amount: 1200 }
+                ],
+                assets: [
+                    { tag: "AST-H01", name: "ThinkPad T14", serial: "SN-HR7711", holder: "alissa.v@company.com" },
+                    { tag: "AST-H02", name: "iPad Air Corporate", serial: "SN-HR9900", holder: "bob.p@company.com" }
+                ]
+            },
+            marketing: {
+                employees: [{ id: "MKT-201", name: "Charlie Day", role: "SEO Manager", email: "charlie.d@company.com" }],
+                finance: [{ id: "FIN-M1", desc: "Social Media Ads Spend", type: "Operational (OpEx)", amount: 15000 }],
+                assets: [{ tag: "AST-M01", name: "MacBook Pro 16", serial: "SN-MK2299", holder: "charlie.d@company.com" }]
+            },
+            production: {
+                employees: [{ id: "PRD-301", name: "David Miller", role: "Floor Supervisor", email: "david.m@company.com" }],
+                finance: [{ id: "FIN-P1", desc: "Assembly Line Part Overhaul", type: "Capital (CapEx)", amount: 32000 }],
+                assets: [{ tag: "AST-P01", name: "Industrial Tablet Rugged", serial: "SN-PR4401", holder: "david.m@company.com" }]
+            },
+            purchase: {
+                employees: [{ id: "PUR-401", name: "Elena Rostova", role: "Procurement Officer", email: "elena.r@company.com" }],
+                finance: [{ id: "FIN-U1", desc: "Raw Material Logistics Contract", type: "Procurement", amount: 8900 }],
+                assets: [{ tag: "AST-U01", name: "Dell Latitude 5420", serial: "SN-PU0012", holder: "elena.r@company.com" }]
+            },
+            sales: {
+                employees: [{ id: "SAL-501", name: "Frank Gorshin", role: "Account Executive", email: "frank.g@company.com" }],
+                finance: [{ id: "FIN-S1", desc: "CRM Enterprise Access Seats", type: "Operational (OpEx)", amount: 6200 }],
+                assets: [{ tag: "AST-S01", name: "iPhone 15 Enterprise", serial: "SN-SL5566", holder: "frank.g@company.com" }]
+            },
+            rd: {
+                employees: [{ id: "RD-601", name: "Dr. Gordon Freeman", role: "Research Scientist", email: "gordon.f@company.com" }],
+                finance: [{ id: "FIN-R1", desc: "Spectrometer Calibration Kit", type: "Capital (CapEx)", amount: 18500 }],
+                assets: [{ tag: "AST-R01", name: "Precision Scope Instrument", serial: "SN-RD1133", holder: "gordon.f@company.com" }]
+            }
+        };
+
+        let currentDepartment = "hr";
+        let currentScope = "employees";
+
+        function switchDepartment(deptKey) {
+            currentDepartment = deptKey;
+            
+            // Toggle sidebar selector styles
+            document.querySelectorAll('#deptNavMenu .nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Format dynamic titles
+            document.getElementById("currentDeptHeader").innerText = `${deptKey.toUpperCase()} Department Hub`;
+            renderData();
+        }
+
+        function switchScope(scopeKey) {
+            currentScope = scopeKey;
+            
+            // Toggle navigation headings tabs
+            document.querySelectorAll('.view-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${scopeKey}`).classList.add('active');
+
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(`scope-${scopeKey}`).classList.add('active');
+            renderData();
+        }
+
+        function renderData() {
+            const data = database[currentDepartment];
+
+            // 1. Calculate and update summary metric indicators
+            document.getElementById("metric-staff").innerText = data.employees.length;
+            const totalSpend = data.finance.reduce((sum, item) => sum + parseInt(item.amount), 0);
+            document.getElementById("metric-budget").innerText = `$${totalSpend.toLocaleString()}`;
+            document.getElementById("metric-assets").innerText = data.assets.length;
+
+            // 2. Load Personnel Records Layout
+            document.getElementById("employeeTableBody").innerHTML = data.employees.map(emp => `
+                <tr>
+                    <td><strong>${emp.id}</strong></td>
+                    <td>${emp.name}</td>
+                    <td><span class="badge badge-active">${emp.role}</span></td>
+                    <td>${emp.email}</td>
+                    <td>
+                        <button class="btn" style="padding:4px 8px; font-size:0.75rem" onclick="setupEmployeeEdit('${emp.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem" onclick="deleteEmployee('${emp.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // 3. Load Expense Ledger
+            document.getElementById("financeTableBody").innerHTML = data.finance.map(fin => `
+                <tr>
+                    <td><strong>${fin.id}</strong></td>
+                    <td>${fin.desc}</td>
+                    <td><span class="badge badge-finance">${fin.type}</span></td>
+                    <td>$${parseInt(fin.amount).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem" onclick="deleteFinance('${fin.id}')"><i class="fa-solid fa-ban"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // 4. Load Asset Mapping Context
+            document.getElementById("assetsTableBody").innerHTML = data.assets.map(ast => `
+                <tr>
+                    <td><strong>${ast.tag}</strong></td>
+                    <td>${ast.name}</td>
+                    <td>${ast.serial}</td>
+                    <td><i class="fa-solid fa-circle-user" style="color:var(--text-muted)"></i> ${ast.holder}</td>
+                </tr>
+            `).join('');
+
+            // Populate mapping dropdown interface
+            document.getElementById("assetSelectId").innerHTML = data.assets.map(ast => `
+                <option value="${ast.tag}">${ast.tag} - ${ast.name}</option>
+            `).join('');
+        }
+
+        /* DATA MANIPULATION CRUDS: ENFORCING ACCOUNTABILITY RULE CONSTRAINTS */
+        function handleEmployeeUpsert(e) {
+            e.preventDefault();
+            const idInput = document.getElementById("empId").value;
+            const name = document.getElementById("empName").value;
+            const role = document.getElementById("empRole").value;
+            const email = document.getElementById("empEmail").value;
+            const list = database[currentDepartment].employees;
+
+            if (idInput) {
+                // Update manipulation strategy
+                let target = list.find(emp => emp.id === idInput);
+                if (target) { target.name = name; target.role = role; target.email = email; }
+            } else {
+                // Instantiation strategy
+                list.push({ id: `EMP-${Math.floor(100 + Math.random() * 900)}`, name, role, email });
+            }
+            resetEmployeeForm();
+            renderData();
+        }
+
+        function setupEmployeeEdit(id) {
+            const emp = database[currentDepartment].employees.find(e => e.id === id);
+            if(emp) {
+                document.getElementById("empId").value = emp.id;
+                document.getElementById("empName").value = emp.name;
+                document.getElementById("empRole").value = emp.role;
+                document.getElementById("empEmail").value = emp.email;
+            }
+        }
+
+        function deleteEmployee(id) {
+            const list = database[currentDepartment].employees;
+            database[currentDepartment].employees = list.filter(e => e.id !== id);
+            renderData();
+        }
+
+        function resetEmployeeForm() {
+            document.getElementById("employeeForm").reset();
+            document.getElementById("empId").value = "";
+        }
+
+        function handleFinanceUpsert(e) {
+            e.preventDefault();
+            const desc = document.getElementById("finDesc").value;
+            const type = document.getElementById("finType").value;
+            const amount = document.getElementById("finAmount").value;
+
+            database[currentDepartment].finance.push({
+                id: `FIN-${Math.floor(100 + Math.random() * 900)}`, desc, type, amount: parseInt(amount)
+            });
+            document.getElementById("financeForm").reset();
+            renderData();
+        }
+
+        function deleteFinance(id) {
+            const list = database[currentDepartment].finance;
+            database[currentDepartment].finance = list.filter(f => f.id !== id);
+            renderData();
+        }
+
+        function handleAssetReallocate(e) {
+            e.preventDefault();
+            const tag = document.getElementById("assetSelectId").value;
+            const nextTargetEmail = document.getElementById("assetTargetEmail").value;
+            
+            const targetAsset = database[currentDepartment].assets.find(a => a.tag === tag);
+            if (targetAsset) {
+                targetAsset.holder = nextTargetEmail;
+                alert(`Asset assignment altered successfully to: ${nextTargetEmail}`);
+                document.getElementById("assetForm").reset();
+                renderData();
+            }
+        }
+
+        // Initialize display configuration state values on startup execution tracking
+        window.onload = () => { renderData(); };
+    </script>
+</body>
+</html>
