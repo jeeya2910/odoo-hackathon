@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard - WorkSphere AssetFlow</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="dashboard.css">
+
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/6f6d4d2b5d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <div class="logo">
+            WorkSphere <span class="brand-badge">AssetFlow</span>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa-solid fa-laptop"></i> My Assets</a></li>
+            <li><a href="#"><i class="fa-solid fa-calendar-check"></i> Bookings</a></li>
+            <li><a href="#"><i class="fa-solid fa-wrench"></i> Maintenance</a></li>
+            <li><a href="#"><i class="fa-solid fa-calendar-days"></i> Attendance</a></li>
+        </ul>
+
+        <button class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </nav>
+
+    <!-- ================= DASHBOARD CONTAINER ================= -->
+    <div class="container">
+
+        <!-- Welcome Card -->
+        <div class="welcome-card">
+            <div>
+                <h1>Welcome Back, John Smith 👋</h1>
+                <p>Here's your work and asset summary for today.</p>
+            </div>
+            <!-- PRD Quick Actions Section -->
+            <div class="quick-actions">
+                <button class="btn-primary"><i class="fa-solid fa-calendar-plus"></i> Book Resource</button>
+                <button class="btn-secondary"><i class="fa-solid fa-screwdriver-wrench"></i> Request Maintenance</button>
+            </div>
+        </div>
+
+        <!-- ================= STATS OVERVIEW ================= -->
+        <div class="stats">
+            <div class="card">
+                <h2>2</h2>
+                <p>Assets Possessed</p>
+            </div>
+            <div class="card">
+                <h2>1</h2>
+                <p>Active Bookings</p>
+            </div>
+            <div class="card">
+                <h2>0</h2>
+                <p>Pending Requests</p>
+            </div>
+            <div class="card">
+                <h2>96%</h2>
+                <p>Attendance</p>
+            </div>
+            <div class="card">
+                <h2>5</h2>
+                <p>Active Projects</p>
+            </div>
+            <div class="card">
+                <h2>8</h2>
+                <p>Leave Balance</p>
+            </div>
+        </div>
+
+        <!-- ================= MAIN THREE-COLUMN GRID ================= -->
+        <div class="dashboard-grid structure-3-col">
+
+            <!-- COLUMN 1: User Profile & Details -->
+            <div class="grid-column">
+                <!-- Employee Profile -->
+                <div class="glass-card">
+                    <div class="profile">
+                        <div class="avatar">JS</div>
+                        <h2>John Smith</h2>
+                        <p>Software Engineer</p>
+                    </div>
+                    <hr>
+                    <div class="info">
+                        <p><strong>Employee ID:</strong> EMP1024</p>
+                        <p><strong>Department:</strong> Engineering</p>
+                        <p><strong>Email:</strong> johnsmith@gmail.com</p>
+                        <p><strong>Office:</strong> Ahmedabad</p>
+                    </div>
+                </div>
+
+                <!-- Performance Overview -->
+                <div class="glass-card">
+                    <h2>Performance Overview</h2>
+                    <div class="performance">
+                        <p>Task Completion</p>
+                        <div class="progress"><div class="progress-bar one"></div></div>
+                        <p>Attendance</p>
+                        <div class="progress"><div class="progress-bar two"></div></div>
+                        <p>Productivity</p>
+                        <div class="progress"><div class="progress-bar three"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMN 2: Asset Management Core (PRD Additions) -->
+            <div class="grid-column">
+                <!-- Assets Owned Module -->
+                <div class="glass-card">
+                    <h2><i class="fa-solid fa-laptop-code"></i> My Assigned Assets</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Asset Tag</th>
+                                <th>Item</th>
+                                <th>Return Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>AF-0842</code></td>
+                                <td>MacBook Pro 16"</td>
+                                <td><span class="status-ok">Permanent</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>AF-1105</code></td>
+                                <td>iPad Pro (Testing)</td>
+                                <td><span class="status-warning">24 Jul 2026</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Resource Bookings Module -->
+                <div class="glass-card">
+                    <h2><i class="fa-solid fa-handshake"></i> Active Resource Bookings</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>Timing / Schedule</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Conference Room B</td>
+                                <td>Today, 3:00 PM - 4:00 PM</td>
+                                <td><span class="badge status-active">Ongoing</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Maintenance History / Status Module -->
+                <div class="glass-card">
+                    <h2><i class="fa-solid fa-trowel-brands"></i> Maintenance Tickets</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th>Issue</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AF-0842</td>
+                                <td>Battery degradation check</td>
+                                <td><span class="badge status-resolved">Resolved</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- COLUMN 3: Tasks, Attendance & Scheduling -->
+            <div class="grid-column">
+                <!-- Today's Tasks -->
+                <div class="glass-card">
+                    <h2>Today's Tasks</h2>
+                    <ul class="task-list">
+                        <li>✔ Attend Sprint Meeting</li>
+                        <li>✔ Complete Dashboard UI</li>
+                        <li>✔ Review Pull Requests</li>
+                        <li>✔ Update Documentation</li>
+                        <li>✔ Submit Daily Report</li>
+                    </ul>
+                </div>
+
+                <!-- Attendance Log -->
+                <div class="glass-card">
+                    <h2>Recent Attendance</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>12 Jul</td><td><span class="status-ok">Present</span></td></tr>
+                            <tr><td>11 Jul</td><td><span class="status-ok">Present</span></td></tr>
+                            <tr><td>10 Jul</td><td><span class="status-ok">Present</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Leave Status -->
+                <div class="glass-card">
+                    <h2>Leave Balances</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Remaining</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Casual</td><td><strong>5 Days</strong></td></tr>
+                            <tr><td>Sick</td><td><strong>2 Days</strong></td></tr>
+                            <tr><td>Paid</td><td><strong>1 Day</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
