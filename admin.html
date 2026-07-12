@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetFlow - Admin Console</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Links to your uniform CSS stylesheet -->
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        /* Tab Visibility Utility Rules */
+        .tab-content {
+            display: none !important;
+        }
+        .tab-content.active-view {
+            display: grid !important;
+        }
+        .navbar .nav-links a {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 2. NAVBAR UTILITIES -->
+    <nav class="navbar">
+        <div class="logo">AssetFlow<span class="brand-badge">Admin</span></div>
+        <ul class="nav-links">
+            <li><a onclick="switchTab('dashboard')" id="nav-dashboard" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li><a onclick="switchTab('assets')" id="nav-assets"><i class="fa-solid fa-cubes"></i> Assets</a></li>
+            <li><a onclick="switchTab('users')" id="nav-users"><i class="fa-solid fa-users"></i> Users</a></li>
+            <li><a onclick="switchTab('security')" id="nav-security"><i class="fa-solid fa-shield-halved"></i> Security</a></li>
+        </ul>
+        <button class="logout-btn"><i class="fa-solid fa-sign-out-alt"></i> Logout</button>
+    </nav>
+
+    <!-- 3. CONTAINER & HERO LAYOUT -->
+    <div class="container">
+        <header class="welcome-card">
+            <div>
+                <h1 id="view-title">Welcome Back, Administrator</h1>
+                <p id="view-description">System status is nominal. 2 pending security overrides require review.</p>
+            </div>
+            <div class="quick-actions">
+                <button class="btn-secondary"><i class="fa-solid fa-download"></i> Export Logs</button>
+                <button class="btn-primary" id="openModalBtn"><i class="fa-solid fa-shield-alert"></i> Security Gate</button>
+            </div>
+        </header>
+
+        <!-- 4. STATS SUMMARY SECTION -->
+        <section class="stats">
+            <div class="card">
+                <h2>1,248</h2>
+                <p>Total Assets</p>
+            </div>
+            <div class="card">
+                <h2>99.98%</h2>
+                <p>Uptime Rate</p>
+            </div>
+            <div class="card">
+                <h2>3,412</h2>
+                <p>API Requests</p>
+            </div>
+            <div class="card">
+                <h2>2</h2>
+                <p>Active Alerts</p>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 1: DASHBOARD ==================== -->
+        <main id="view-dashboard" class="structure-3-col tab-content active-view">
+            <!-- Column 1: Projects & Health -->
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-folder-tree" style="color: var(--primary);"></i> Active Clusters</h2>
+                    <ul class="project-list">
+                        <li><strong>Cluster-Alpha:</strong> Core Services <span class="badge status-ok" style="float: right;">● Online</span></li>
+                        <li><strong>Cluster-Beta:</strong> Data Processing <span class="badge status-ok" style="float: right;">● Online</span></li>
+                        <li><strong>Cluster-Gamma:</strong> Legacy Backups <span class="badge status-warning" style="float: right;">● Syncing</span></li>
+                    </ul>
+                </section>
+            </div>
+
+            <!-- Column 2: Data Tables -->
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Security Overrides Log</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Target Asset</th>
+                                <th>Requested By</th>
+                                <th>Level</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>prod-db-01</code></td>
+                                <td>jharris.adm</td>
+                                <td><span class="badge status-warning">Tier 2</span></td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-table-action promote">Approve</button>
+                                        <button class="btn-table-action" style="color: var(--danger);">Deny</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>auth-node-sec</code></td>
+                                <td>srogers.sec</td>
+                                <td><span class="badge status-ok" style="color: #ef4444;">Tier 3</span></td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-table-action promote">Approve</button>
+                                        <button class="btn-table-action" style="color: var(--danger);">Deny</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <!-- Column 3: System Controls -->
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Rapid Toggle Node</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Direct controls for global environment variables.</p>
+                    <button class="btn-danger" style="width: 100%; justify-content: center; margin-bottom: 0.75rem;">
+                        <i class="fa-solid fa-bolt"></i> Emergency Lockdown
+                    </button>
+                    <button class="btn-secondary" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-rotate"></i> Rolling Restart
+                    </button>
+                </section>
+            </div>
+        </main>
+
+        <!-- ==================== VIEW 2: ASSETS MANAGEMENT ==================== -->
+        <main id="view-assets" class="structure-3-col tab-content">
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-server" style="color: var(--primary);"></i> Hardware Nodes</h2>
+                    <ul class="project-list">
+                        <li><strong>Rack-A1:</strong> Compute Node <span class="badge status-ok" style="float: right;">94% Load</span></li>
+                        <li><strong>Rack-B4:</strong> Object Storage <span class="badge status-ok" style="float: right;">12TB Free</span></li>
+                        <li><strong>Edge-01:</strong> Gateway CDN <span class="badge status-ok" style="float: right;">Active</span></li>
+                    </ul>
+                </section>
+            </div>
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-database" style="color: var(--primary);"></i> Active Databases</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Database ID</th>
+                                <th>Engine</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>customer-rel-db</code></td>
+                                <td>PostgreSQL</td>
+                                <td><span class="badge status-ok" style="color: var(--success)">Healthy</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>session-cache-04</code></td>
+                                <td>Redis Cluster</td>
+                                <td><span class="badge status-ok" style="color: var(--success)">Healthy</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-plus" style="color: var(--primary);"></i> Asset Provisions</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Deploy a new isolated runtime or container micro-service instantly.</p>
+                    <button class="btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-cloud-arrow-up"></i> Provision Resource</button>
+                </section>
+            </div>
+        </main>
+
+        <!-- ==================== VIEW 3: USERS CONTROL ==================== -->
+        <main id="view-users" class="structure-3-col tab-content">
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-user-shield" style="color: var(--primary);"></i> Admin Roster</h2>
+                    <ul class="project-list">
+                        <li><strong>m.smith.adm</strong> — Superuser</li>
+                        <li><strong>j.doe.adm</strong> — Infrastructure</li>
+                        <li><strong>a.vakarian.adm</strong> — DevOps Sec</li>
+                    </ul>
+                </section>
+            </div>
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-users-gear" style="color: var(--primary);"></i> Active Sessions</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Identity</th>
+                                <th>Assigned Group</th>
+                                <th>Location IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>t.boone.dev</td>
+                                <td><span class="badge status-active">Developer</span></td>
+                                <td><code>192.168.1.45</code></td>
+                            </tr>
+                            <tr>
+                                <td>k.ross.ops</td>
+                                <td><span class="badge status-active">Operator</span></td>
+                                <td><code>10.0.4.112</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Access Control</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Invite external network auditors or configure temporary developer access privileges.</p>
+                    <button class="btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-key"></i> Modify IAM Rules</button>
+                </section>
+            </div>
+        </main>
+
+        <!-- ==================== VIEW 4: SECURITY PROTOCOLS ==================== -->
+        <main id="view-security" class="structure-3-col tab-content">
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-fingerprint" style="color: var(--primary);"></i> Firewall Policies</h2>
+                    <ul class="project-list">
+                        <li><strong>Rule-104:</strong> Inbound Port 443 <span class="badge status-ok" style="float: right;">Allowed</span></li>
+                        <li><strong>Rule-209:</strong> SSH Port 22 <span class="badge status-warning" style="float: right;">Restricted</span></li>
+                        <li><strong>Rule-312:</strong> Database Port 5432 <span class="badge status-ok" style="float: right;">Internal Only</span></li>
+                    </ul>
+                </section>
+            </div>
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-triangle-exclamation" style="color: var(--primary);"></i> Vulnerability Scans</h2>
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Vector</th>
+                                <th>Severity</th>
+                                <th>Mitigation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Outdated SSL Pack</td>
+                                <td><span class="badge status-warning" style="background: rgba(245,158,11,0.15);">Medium</span></td>
+                                <td>Patch Scheduled</td>
+                            </tr>
+                            <tr>
+                                <td>Orphaned IAM Profile</td>
+                                <td><span class="badge status-resolved">Resolved</span></td>
+                                <td>Revoked Access</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div class="grid-column">
+                <section class="glass-card">
+                    <h2><i class="fa-solid fa-shield-virus" style="color: var(--primary);"></i> Core Defense</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Perform a thorough cryptographic signature validation across system builds.</p>
+                    <button class="btn-secondary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-mask"></i> Deep Scan Node</button>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- 8. ADMINISTRATIVE OVERRIDE SECURITY GATE MODAL -->
+    <div class="modal-overlay" id="securityModal">
+        <div class="modal-content glass-card">
+            <h2><i class="fa-solid fa-shield-lock" style="color: var(--warning);"></i> Admin Security Gate</h2>
+            <hr>
+            <form id="modalForm" onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <label for="adminUser">Verify Admin Identifier</label>
+                    <input type="text" id="adminUser" placeholder="e.g. jdoe.adm" required>
+                </div>
+                <div class="form-group">
+                    <label for="overrideClearance">Clearance Classification Level</label>
+                    <select id="overrideClearance" class="form-select">
+                        <option value="t1">Level 1 - General Read/Write Override</option>
+                        <option value="t2">Level 2 - Elevated Data Modification</option>
+                        <option value="t3">Level 3 - Structural Infrastructure Destruction</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="secToken">Secure Access OTP Token</label>
+                    <input type="password" id="secToken" placeholder="••••••••" required>
+                </div>
+                <hr>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="closeModalBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Authenticate Gate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dynamic Router and Modal Testing Script Block -->
+    <script>
+        // Modal Event Listeners
+        const modal = document.getElementById('securityModal');
+        const openBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+
+        openBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+
+        // Tab View Switching Logic Router
+        function switchTab(targetTab) {
+            // Hide all views
+            document.querySelectorAll('.tab-content').forEach(view => {
+                view.classList.remove('active-view');
+            });
+            // Remove active style state from navbar items
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Make chosen view visible and update navbar highlights
+            document.getElementById(`view-${targetTab}`).classList.add('active-view');
+            document.getElementById(`nav-${targetTab}`).classList.add('active');
+
+            // Dynamically rewrite upper card text contextual header description values
+            const headers = {
+                dashboard: { title: "Welcome Back, Administrator", desc: "System status is nominal. 2 pending security overrides require review." },
+                assets: { title: "Global Assets Registry", desc: "Comprehensive structural state data covering system server stacks, nodes, and database elements." },
+                users: { title: "Identity & Access Management (IAM)", desc: "Audit connected operations teams, active browser connections, and developer permission states." },
+                security: { title: "Security Protocols & Threat Intelligence", desc: "Firewall packet inspection settings, live active vulnerability alerts, and cryptographic verification status." }
+            };
+
+            document.getElementById('view-title').innerText = headers[targetTab].title;
+            document.getElementById('view-description').innerText = headers[targetTab].desc;
+        }
+    </script>
+</body>
+</html>
