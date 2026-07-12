@@ -11,7 +11,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'YOUR_MYSQL_PASSWORD', // <--- Change this to your real MySQL password
+    password: 'param', // <--- Change this to your real MySQL password
     database: 'odoo'
 });
 
@@ -25,6 +25,31 @@ db.connect((err) => {
 
 // 2. Setup Route: Run this ONCE in your browser to create your admin user
 app.get('/api/setup', async (req, res) => {
+    // Add this right below your first setup route
+app.get('/api/setup-employee', async (req, res) => {
+    try {
+        // Securely hash the password 'password123'
+        const hashedPassword = await bcrypt.hash('password123', 10);
+        
+        const query = `
+            INSERT INTO employees (full_name, email, password, department_id, role_id, status) 
+            VALUES (?, ?, ?, NULL, ?, 'Active')
+        `;
+        
+        // Notice we are using role_id: 4 (Normal Employee) this time!
+        db.execute(query, ['Normal User', 'employee@odoo.com', hashedPassword, 4], (err, results) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.send('Employee already exists!');
+                }
+                return res.status(500).send('Database error: ' + err.message);
+            }
+            res.send('Success! Normal employee created. Email: employee@odoo.com | Password: password123');
+        });
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
+});
     try {
         // Securely hash the password
         const hashedPassword = await bcrypt.hash('password123', 10);

@@ -20,50 +20,45 @@ togglePassword.addEventListener('click', function () {
     }
 });
 
-// --- 2. REAL Authentication Form Submit ---
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
+// --- 2. Hardcoded Frontend Authentication ---
+document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const user = document.getElementById('username').value;
+    const userEmail = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value;
     const messageDiv = document.getElementById('message');
 
-    try {
-        // Send the typed credentials to your Node.js backend
-        const response = await fetch('http://localhost:3000/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            // Package the data up nicely for the server
-            body: JSON.stringify({ username: user, password: pass }) 
-        });
+    // Define the valid users, their passwords, and where they should be redirected
+    const allowedUsers = {
+        'employee@odoo.com': { password: 'password123', redirect: 'dashboard.html', role: 'Employee' },
+        'admin@odoo.com':    { password: 'password123', redirect: 'admin.html', role: 'Admin' },
+        'manager@odoo.com':  { password: 'password123', redirect: 'assetmanager.html', role: 'Manager' },
+        'hod@odoo.com':      { password: 'password123', redirect: 'department_head.html', role: 'Head of Department' }
+    };
 
-        const data = await response.json();
+    // Check if the typed email exists in our allowedUsers list
+    const matchedUser = allowedUsers[userEmail];
 
-        if (response.ok) {
-            // Success! The server verified the password against the database.
-            messageDiv.style.color = '#4ade80'; 
-            messageDiv.style.display = 'block';
-            messageDiv.innerText = 'Login successful! Redirecting...';
-            
-            // Save the user data so the dashboard can display their actual name
-            localStorage.setItem('loggedInUser', JSON.stringify(data.user));
-            
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 800); 
-        } else {
-            // The server rejected the credentials (wrong email or password)
-            messageDiv.style.color = '#f87171'; 
-            messageDiv.style.display = 'block';
-            messageDiv.innerText = data.error || 'Invalid email or password. Try again.';
-        }
-    } catch (error) {
-        // If the backend isn't running, show a connection error
+    // Verify if user exists AND the password matches
+    if (matchedUser && matchedUser.password === pass) {
+        // Success!
+        messageDiv.style.color = '#4ade80'; 
+        messageDiv.style.display = 'block';
+        messageDiv.innerText = `Login successful! Redirecting to ${matchedUser.role} portal...`;
+        
+        // Save the user data so the next page knows who logged in
+        const userDataToSave = { email: userEmail, role: matchedUser.role };
+        localStorage.setItem('loggedInUser', JSON.stringify(userDataToSave));
+        
+        // Redirect to their specific file
+        setTimeout(() => {
+            window.location.href = matchedUser.redirect;
+        }, 800); 
+
+    } else {
+        // Failure: Wrong email or password
         messageDiv.style.color = '#f87171'; 
         messageDiv.style.display = 'block';
-        messageDiv.innerText = 'Cannot connect to the server. Is it running?';
-        console.error('Login error:', error);
+        messageDiv.innerText = 'Invalid email or password. Try again.';
     }
 });
