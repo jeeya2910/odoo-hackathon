@@ -4,13 +4,9 @@ const passwordInput = document.getElementById('password');
 const eyeIcon = document.getElementById('eyeIcon');
 
 togglePassword.addEventListener('click', function () {
-    // Check the current type of the input
     const isPassword = passwordInput.getAttribute('type') === 'password';
-    
-    // Toggle the type attribute
     passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
     
-    // Swap the SVG icon between eye and eye-slash
     if (isPassword) {
         // Eye-slash icon (hide password)
         eyeIcon.innerHTML = `
@@ -28,17 +24,28 @@ togglePassword.addEventListener('click', function () {
 
 // --- 2. Mock Authentication Form Submit ---
 document.getElementById('loginForm').addEventListener('submit', function(event) {
+    // Prevent the form from refreshing the page
     event.preventDefault();
 
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
     const messageDiv = document.getElementById('message');
 
+    // Check credentials
     if (user === 'param' && pass === 'password123') {
+        
+        // 1. Show the success message
         messageDiv.style.color = '#4ade80'; 
         messageDiv.style.display = 'block';
-        messageDiv.innerText = 'Login successful! Welcome back.';
+        messageDiv.innerText = 'Login successful! Redirecting...';
+        
+        // 2. THIS IS THE NEW PART: Wait 0.8 seconds, then load the dashboard
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 800); 
+
     } else {
+        // Error state remains exactly the same
         messageDiv.style.color = '#f87171'; 
         messageDiv.style.display = 'block';
         messageDiv.innerText = 'Invalid username or password. Try again.';

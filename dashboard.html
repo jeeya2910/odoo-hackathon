@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-logo">DevDash</div>
+        <button id="logoutBtn" class="logout-btn">Log Out</button>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        
+        <!-- Welcome Header -->
+        <header class="dashboard-header">
+            <h1>Welcome back, Param Naresh Mehta!</h1>
+            <p>Here is an overview of your workspace today.</p>
+        </header>
+
+        <!-- Grid for Dashboard Widgets -->
+        <div class="dashboard-grid">
+            
+            <!-- Profile Card -->
+            <div class="glass-card profile-card">
+                <div class="avatar">PM</div>
+                <h3>Param Naresh Mehta</h3>
+                <p class="subtitle">B.Tech Computer Engineering • 4th Semester</p>
+                <p class="details">G H Patel College of Engineering & Technology</p>
+                <div class="skills-tags">
+                    <span>Java</span>
+                    <span>C/C++</span>
+                    <span>DBMS</span>
+                    <span>Cloud Computing</span>
+                </div>
+            </div>
+
+            <!-- Recent Activity Card -->
+            <div class="glass-card activity-card">
+                <h3>Recent Projects & Activity</h3>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">💻</span>
+                        <div>
+                            <strong>Custom PC Build List</strong>
+                            <p>Updated hardware specifications</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🏍️</span>
+                        <div>
+                            <strong>Motorcycle Spec Comparison</strong>
+                            <p>Yamaha MT15v2 vs. Royal Enfield Hunter 350</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🏋️</span>
+                        <div>
+                            <strong>Fitness Tracker</strong>
+                            <p>Logged bodyweight strength routine</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
