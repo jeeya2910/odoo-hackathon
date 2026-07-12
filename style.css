@@ -109,3 +109,39 @@ button:hover {
     color: #c4b5fd;
     text-decoration: underline;
 }
+/* --- Password Eye Button Styles --- */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Add padding to the right so the text doesn't type under the icon */
+.password-container input {
+    padding-right: 45px; 
+}
+
+/* Position the eye button inside the input field */
+.eye-btn {
+    position: absolute;
+    right: 12px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    color: #a0aabf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Override the global button hover effects so it doesn't float or glow */
+.eye-btn:hover {
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+    color: #c4b5fd; /* Light purple on hover */
+}

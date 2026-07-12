@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <!-- You can link your CSS file here later -->
+     <!-- The CSS file is now actively linked below -->
+    <link rel="stylesheet" href="style.css">
     <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 <body>
 
     <div class="login-container">
         <h2>Login</h2>
+
+        <!-- We added this div to show success/error messages -->
+        <div id="message" style="text-align: center; margin-bottom: 15px; font-size: 14px; display: none;"></div>
         
         <form id="loginForm" action="#" method="POST">
             <div class="input-group">
@@ -20,7 +25,17 @@
 
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
+                <!-- New container to hold the input and the eye button together -->
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                    <button type="button" id="togglePassword" class="eye-btn" aria-label="Toggle password visibility">
+                        <!-- Eye Icon (SVG) -->
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <button type="submit">Sign In</button>
@@ -30,6 +45,9 @@
             </p>
         </form>
     </div>
+
+    <!-- The JavaScript file is linked here at the bottom -->
+    <script src="script.js"></script>
 
 </body>
 </html>
